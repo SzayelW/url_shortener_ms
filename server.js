@@ -5,6 +5,7 @@ var validURL = require('valid-url')
 var bodyParser = require('body-parser')
 var mongoUrl = process.env.MONGOLAB_URI 
 var jsonParser = bodyParser.json()
+
 app.get('/', (req, res)=>{
     res.sendfile('./index.html', {root: __dirname })
 })
@@ -26,7 +27,7 @@ app.get('/:shortUrl', (req, res)=>{
     res.json({error : "short url doesnt exist"})
 })
 
-app.get('/new/*', jsonParser, (req, res)=>{
+app.get('/new/*', (req, res)=>{
     var url = req.param(0)
     if(validURL.isWebUri(url)){
         var randomUrl = Math.floor((Math.random()*9999)+1)
