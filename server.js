@@ -7,29 +7,21 @@ var mongoUrl = process.env.MONGOLAB_URI
 var jsonParser = bodyParser.json()
 
 app.get('/', (req, res)=>{
-    res.sendfile('./index.html', {root: __dirname })
+    res.send('Homepage')
 })
 
-app.get('/:shortUrl', (req, res, next)=>{
+app.get('/:shortUrl', jsonParser, (req, res)=>{
     var data = req.params.shortUrl
     if(!isNaN(data)){
-        var url = req.headers['x-forwarded-proto']+"://"+req.headers['host']+"/"+
+        var url = "https://api-projects-andres-w.c9users.io/"+data ///req.headers['x-forwarded-proto']+"://"+req.headers['host']+"/"+data
         console.log(url)
-        mongodb.connect(mongoUrl, (err,db)=>{
-            if(err){ throw err}
-            db.collection('urls_col').find({short_url : url}).toArray((err, doc)=>{
-                if(err){throw err;}
-                db.close()
-                return res.redirect(doc[0].original_url)
-            })
-        })
+        res.send(url)
     }else{
       res.json({error: "invalid data"})   
     }
-    res.json({error : "short url doesnt exist"})
 })
 
-app.get('/new/*', (req, res)=>{
+app.get('/new/*', jsonParser, (req, res)=>{
     var url = req.param(0)
     if(validURL.isWebUri(url)){
         var randomUrl = Math.floor((Math.random()*9999)+1)
