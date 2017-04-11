@@ -10,15 +10,17 @@ app.get('/', (req, res)=>{
     res.sendfile('./index.html', {root: __dirname })
 })
 
-app.get('/:shortUrl', (req, res)=>{
+app.get('/:shortUrl', (req, res, next)=>{
     var data = req.params.shortUrl
     if(!isNaN(data)){
-        var url = req.headers['x-forwarded-proto']+"://"+req.headers['host']+"/"+data
+        var url = req.headers['x-forwarded-proto']+"://"+req.headers['host']+"/"+
+        console.log(url)
         mongodb.connect(mongoUrl, (err,db)=>{
             if(err){ throw err}
             db.collection('urls_col').find({short_url : url}).toArray((err, doc)=>{
-                if(err){throw err}
-                res.redirect(doc[0].original_url)
+                if(err){throw err;}
+                db.close()
+                return res.redirect(doc[0].original_url)
             })
         })
     }else{
