@@ -6,7 +6,7 @@ var bodyParser = require('body-parser')
 var mongoUrl = process.env.MONGOLAB_URI 
 var jsonParser = bodyParser.json()
 app.get('/', (req, res)=>{
-    res.send('Homepage')
+    res.sendfile('./index.html', {root: __dirname })
 })
 
 app.get('/:shortUrl', (req, res)=>{
