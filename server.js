@@ -7,15 +7,21 @@ var mongoUrl = process.env.MONGOLAB_URI
 var jsonParser = bodyParser.json()
 
 app.get('/', (req, res)=>{
-    res.send('Homepage')
+    res.sendFile('./index.html', {root: __dirname })
 })
 
-app.get('/:shortUrl', jsonParser, (req, res)=>{
+app.get('/:shortUrl', (req, res)=>{
     var data = req.params.shortUrl
     if(!isNaN(data)){
-        var url = "https://api-projects-andres-w.c9users.io/"+data ///req.headers['x-forwarded-proto']+"://"+req.headers['host']+"/"+data
-        console.log(url)
-        res.send(url)
+        var url = req.headers['x-forwarded-proto']+"://"+req.headers['host']+"/"+data
+        mongodb.connect(mongoUrl, (err,db)=>{
+            if(err){ throw err}
+            db.collection('urls_col').find({short_url : url}).toArray((err, doc)=>{
+                if(err){throw err}
+                res.redirect(doc[0].original_url)
+                db.close()
+            })
+        })
     }else{
       res.json({error: "invalid data"})   
     }
