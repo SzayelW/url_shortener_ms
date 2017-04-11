@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>URL Shortener Microservice</title>
+    </head>
+    <body>
+        <h1>URL Shortener Microservice</h1>
+        <p>
+            <h2>User stories</h2>
+            <ul>
+                <li>I can pass a URL as a parameter and I will receive a shortened URL in the JSON response.</li>
+                <li>When I visit that shortened URL, it will redirect me to my original link.</li>
+                <li>If I pass an invalid URL that doesn't follow the valid http://www.example.com format, the JSON response will contain an error instead</li>
+            </ul>
+            <h3>Creation Usage</h3>
+            https://short-url-ms.herokuapp.com/new/http://www.github.com/
+            <h3>Creation output</h3>
+            {"original_url":"http://www.github.com","short_url":"https://short-url-ms.herokuapp.com/9421"}
+            <h3>Usage</h3>
+            https://short-url-ms.herokuapp.com/9421
+            <h3>Will redirect to</h3>
+            http://www.github.com
+        </p>
+    </body>
+</html>
